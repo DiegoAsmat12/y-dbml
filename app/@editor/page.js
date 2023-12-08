@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment, useEffect, useRef, useState } from "react"
+import { Fragment, useEffect, useMemo, useRef, useState } from "react"
 
 export default function Editor() {
 
@@ -41,12 +41,17 @@ export default function Editor() {
         return previous;
     }
 
+    const codeArray = useMemo(() => {
+        return code.split("").reduce(concatenateReducer, [""])
+    }, [code])
+
+
     return (
         <div className="col-span-1">
             <textarea className="h-0 w-0 absolute" onChange={(e) => setCode(e.target.value)} value={code} ref={textRef} onKeyDown={KeyDownHandler}/>
             <div className="bg-[#2c2c2e] text-lg text-white p-2 font-mono h-full cursor-pointer whitespace-pre-wrap" onClick={() => textRef.current.focus()}>
                 {/* Create html like elements */}
-                {code.split("").reduce(concatenateReducer, [""]).map((val, index) => 
+                {codeArray.map((val, index) => 
                 (
                     <Fragment key={index+val} >
                         {
