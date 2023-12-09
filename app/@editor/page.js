@@ -22,20 +22,24 @@ export default function Editor() {
         if(e.key == 'Tab'){
             e.preventDefault();
             
+            const {selectionStart, selectionEnd} = e.target;
 
-            let start = e.target.selectionStart;
-            let end = e.target.selectionEnd;
+            const newText = code.substring(0, selectionStart)
+                + "\t"
+                + code.substring(selectionEnd);
 
-            setCode(
-                code.substring(0, start) +
-                "\t" +
-                code.substring(end)
+            textRef.current.focus();
+
+            // First we have to assign text in order to setSelectionRange to the exact location
+            textRef.current.value = newText; 
+
+            textRef.current.setSelectionRange(
+                selectionStart+1,
+                selectionEnd+1
             )
-            
-            e.target.selectionStart = e.target.selectionEnd = start + 1
 
+            setCode(newText);
         }
-
 
     }
 
@@ -50,7 +54,6 @@ export default function Editor() {
 
             for(const {color, textList} of specialText){
                 if(textList.some(val => val === value)) {
-                    console.log("Here")
                     output.color = color;
                     break;
                 }
@@ -70,8 +73,8 @@ export default function Editor() {
 
 
     return (
-        <section className="col-span-1">
-            <textarea className="h-0 w-0 absolute" onChange={(e) => setCode(e.target.value)} value={code} ref={textRef} onKeyDown={KeyDownHandler}/>
+        <section className="col-span-1 relative">
+            <textarea className="text-transparent bg-transparent caret-white absolute h-full w-full p-2 text-lg font-mono" onChange={(e) => setCode(e.target.value)} value={code} ref={textRef} onKeyDown={KeyDownHandler} />
             <div className="bg-[#282828] text-lg text-white p-2 font-mono h-full cursor-pointer whitespace-pre-wrap" onClick={() => textRef.current.focus()}>
                 {/* Create html like elements */}
                 {codeArray.map(({color, value}, index) => 
