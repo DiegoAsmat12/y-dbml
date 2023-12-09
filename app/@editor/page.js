@@ -2,6 +2,17 @@
 
 import { Fragment, useEffect, useMemo, useRef, useState } from "react"
 
+const specialText = [
+    {
+        color: "#3270a0",
+        textList: [
+            "Database",
+            "General",
+            "Ref"
+        ]
+    }
+]
+
 export default function Editor() {
 
     const [code, setCode] = useState("")
@@ -30,33 +41,47 @@ export default function Editor() {
 
 
     const concatenateReducer = (previous, current) => {
-        console.log({previous})
-        console.log({current})
+        let output =  {
+            color: "#ffffff",
+            value: current
+        };
         if(current !== " " && current !== "\t" && current !== "\n"){
-            previous[previous.length-1] = previous[previous.length-1] + current
-        }
+            let value = previous[previous.length-1].value + current;
+
+            for(const {color, textList} of specialText){
+                if(textList.some(val => val === value)) {
+                    console.log("Here")
+                    output.color = color;
+                    break;
+                }
+            }
             
-        else previous = [...previous, current, ""];
+            output.value = value;
+            previous[previous.length-1] = output;
+        }
+        else previous = [...previous, output, {value: "", color: "#ffffff"}];
 
         return previous;
     }
 
     const codeArray = useMemo(() => {
-        return code.split("").reduce(concatenateReducer, [""])
+        return code.split("").reduce(concatenateReducer, [{value: "", color: "#ffffff"}])
     }, [code])
 
 
     return (
-        <div className="col-span-1">
+        <section className="col-span-1">
             <textarea className="h-0 w-0 absolute" onChange={(e) => setCode(e.target.value)} value={code} ref={textRef} onKeyDown={KeyDownHandler}/>
-            <div className="bg-[#2c2c2e] text-lg text-white p-2 font-mono h-full cursor-pointer whitespace-pre-wrap" onClick={() => textRef.current.focus()}>
+            <div className="bg-[#282828] text-lg text-white p-2 font-mono h-full cursor-pointer whitespace-pre-wrap" onClick={() => textRef.current.focus()}>
                 {/* Create html like elements */}
-                {codeArray.map((val, index) => 
+                {codeArray.map(({color, value}, index) => 
                 (
-                    <Fragment key={index+val} >
+                    <Fragment key={index+value} >
                         {
-                            val !== " " && val !== "\t" && val !== "\n" ? 
-                            <span className="text-green-100">{val}</span> : <>{val}</>
+                            value !== " " && value !== "\t" && value !== "\n" ? (
+                                <span style={{color}}>{value}</span>
+                            )
+                            : <>{value}</>
 
                         }
                     
@@ -64,7 +89,7 @@ export default function Editor() {
                 
                 ))}
             </div>
-        </div>
+        </section>
         
     )
 }
