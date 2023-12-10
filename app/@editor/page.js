@@ -74,8 +74,8 @@ export default function Editor() {
 
     return (
         <section className="col-span-1 relative">
-            <textarea className="text-transparent bg-transparent caret-white absolute h-full w-full p-2 text-lg font-mono" onChange={(e) => setCode(e.target.value)} value={code} ref={textRef} onKeyDown={KeyDownHandler} />
-            <div className="bg-[#282828] text-lg text-white p-2 font-mono h-full cursor-pointer whitespace-pre-wrap" onClick={() => textRef.current.focus()}>
+            <textarea className="text-transparent bg-transparent caret-white absolute h-full w-full p-2 text-lg font-mono resize-none outline-none" onChange={(e) => setCode(e.target.value)} value={code} ref={textRef} onKeyDown={KeyDownHandler} />
+            <div className="bg-[#120616] text-lg text-white p-2 font-mono h-full cursor-pointer whitespace-pre-wrap" onClick={() => textRef.current.focus()}>
                 {/* Create html like elements */}
                 {codeArray.map(({color, value}, index) => 
                 (
