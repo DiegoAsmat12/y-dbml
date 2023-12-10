@@ -1,7 +1,7 @@
 'use client'
 import EntityNode from "@/components/node/EntityNode";
 import { useCallback, useState } from "react";
-import ReactFlow, { Background, Controls, addEdge, applyEdgeChanges, applyNodeChanges } from "reactflow";
+import ReactFlow, { Background, Controls, addEdge, applyEdgeChanges, applyNodeChanges, useEdgesState, useNodesState } from "reactflow";
 import 'reactflow/dist/style.css';
 
 
@@ -10,21 +10,12 @@ const NodeTypes = {
 }
 
 const initialNodes = [
-    {id: '1', type: 'entity', data: {name: "test"}, position: {x:0, y:0}}
+    {id: '1', type: 'entity', data: {name: "Potential Entity"}, position: {x:0, y:0}, dragHandle: '.custom-drag-heading'}
 ]
 export default function DBDiagram() {
 
-    const [nodes, setNodes] = useState(initialNodes)
-    const [edges, setEdges] = useState([]);
-
-    const onNodesChange = useCallback(
-        (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
-        [setNodes]
-    );
-    const onEdgesChange = useCallback(
-        (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
-        [setEdges]
-    );
+    const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
+    const [edges, setEdges, onEdgesChange] = useEdgesState([]);
     const onConnect = useCallback(
         (connection) => setEdges((eds) => addEdge(connection, eds)),
         [setEdges]
