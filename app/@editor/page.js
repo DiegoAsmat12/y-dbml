@@ -1,5 +1,7 @@
 'use client'
 
+import { useDBMLContext } from "@/contexts/global/DBMLContext";
+import { NODEDEFINITIONS } from "@/utils/textEditor";
 import { Fragment, useEffect, useMemo, useRef, useState } from "react"
 
 const specialText = [
@@ -15,6 +17,7 @@ const specialText = [
 
 export default function Editor() {
 
+    const {setEntities} = useDBMLContext();
     const [code, setCode] = useState("")
     const textRef = useRef();
 
@@ -69,6 +72,11 @@ export default function Editor() {
 
     const codeArray = useMemo(() => {
         return code.split("").reduce(concatenateReducer, [{value: "", color: "#ffffff"}])
+    }, [code])
+
+    useEffect(() => {
+        let entities = code.match(NODEDEFINITIONS.entity);
+        setEntities(entities?.length? entities: [])
     }, [code])
 
 

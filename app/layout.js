@@ -1,5 +1,6 @@
 import { Inter } from 'next/font/google'
 import './globals.css'
+import { DBMLContextProvider, useDBMLContext } from '@/contexts/global/DBMLContext'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -9,16 +10,16 @@ export const metadata = {
 }
 
 export default function RootLayout({ dbdiagram, editor }) {
-  
-
-  
+    
   return (
     <html lang="en">
       <body>
-        <main className='w-full bg-black grid grid-cols-4 h-screen grid-rows-1'>
-          {editor}
-          {dbdiagram}
-        </main>
+        <DBMLContextProvider>
+          <main className='w-full bg-black grid grid-cols-4 h-screen grid-rows-1'>
+            {editor}
+            {dbdiagram}
+          </main>
+        </DBMLContextProvider>
 
       </body>
     </html>

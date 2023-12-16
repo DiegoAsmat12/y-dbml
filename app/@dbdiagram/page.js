@@ -1,6 +1,7 @@
 'use client'
 import EntityNode from "@/components/node/EntityNode";
-import { useCallback, useState } from "react";
+import { useDBMLContext } from "@/contexts/global/DBMLContext";
+import { useCallback, useEffect, useState } from "react";
 import ReactFlow, { Background, Controls, addEdge, applyEdgeChanges, applyNodeChanges, useEdgesState, useNodesState } from "reactflow";
 import 'reactflow/dist/style.css';
 
@@ -14,6 +15,7 @@ const initialNodes = [
 ]
 export default function DBDiagram() {
 
+    const {entities} = useDBMLContext();
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
     const onConnect = useCallback(
@@ -21,6 +23,18 @@ export default function DBDiagram() {
         [setEdges]
     );
 
+    useEffect(() => {
+        const newNodes = entities.map(value => ({
+            id: value,
+            type: "entity",
+            data: {name: value},
+            position: {x:0, y:0},
+            dragHandle: '.custom-drag-heading'
+        }))
+
+
+        setNodes(prev => [...prev, ...newNodes])
+    }, [entities])
 
     return (
         <ReactFlow className="h-full w-full col-span-3 bg-[#ccc]"
