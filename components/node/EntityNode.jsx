@@ -11,7 +11,7 @@ export default memo(({data={name: 'TEST', isRef: false, numConnections: 0}}) => 
             
             <div className="relative p-2 flex items-center gap-2">
                 {/* Putting a handle in a "space" */}
-                <Handle position="left" className="bg-transparent text-transparent"/>
+                <Handle position="left" className="px-1"/>
                 <div className="flex-1">
                     <span className="text-gray-700 text-base">Property: </span><span className="text-base text-blue-300 whitespace-nowrap">String[3-25]</span>
 
