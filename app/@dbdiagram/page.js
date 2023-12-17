@@ -24,15 +24,18 @@ export default function DBDiagram() {
     );
 
     useEffect(() => {
-        const newNodes = entities.map(value => ({
-            id: value,
-            type: "entity",
-            data: {name: value},
-            position: {x:0, y:0},
-            dragHandle: '.custom-drag-heading'
-        }))
+        const newNodes = entities.reduce((prev,current) => {
+            if(nodes.some(item => item.id === current)) return prev;
+            
 
+            return [...prev, {id: current,
+                type: "entity",
+                data: {name: current},
+                position: {x:0, y:0},
+                dragHandle: '.custom-drag-heading'}]
+        }, [])
 
+        
         setNodes(prev => [...prev, ...newNodes])
     }, [entities])
 
