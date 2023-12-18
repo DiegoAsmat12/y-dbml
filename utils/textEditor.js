@@ -1,5 +1,6 @@
 export const NODEDEFINITIONS = {
-    entity: /\w*\s(\<[A-Za-z]*\>)?\{(.|\s)*?\}/g,
+    entity: /(?<entity>\w+)\s*(?:\<(?<parentEntity>\w*)\>)?\s*\{(?:.|\s)*?\}/g,
+    property: /(?<property>\w+|\s)\:(?<nullable>\!*)(?<type>string|double|int|map\<\w*\>)/g
 }
 
 

@@ -12,3 +12,4 @@
 >
 > ## Bugs (For recording purposes):
 > - [x] "\t" and "\n" error when working with multiple lines (Found: 08/12/2023)
+> - [ ] Too much renderings in order to render "properties" and matching regex. (Found: 17/12/2023)

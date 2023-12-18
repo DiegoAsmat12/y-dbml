@@ -15,7 +15,7 @@ const initialNodes = [
 ]
 export default function DBDiagram() {
 
-    const {entities} = useDBMLContext();
+    const {dynamicNodes} = useDBMLContext();
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
     const onConnect = useCallback(
@@ -24,8 +24,11 @@ export default function DBDiagram() {
     );
 
     useEffect(() => {
-        const newNodes = entities.reduce((prev,current) => {
-            if(nodes.some(item => item.id === current)) return prev;
+        const newNodes = dynamicNodes.reduce((prev,current) => {
+            let node = nodes.find(item => item.id === current)
+            if(node?.id){
+                return [...prev, {...node, data: {name: "edit"}}];
+            }
             
 
             return [...prev, {id: current,
@@ -37,7 +40,7 @@ export default function DBDiagram() {
 
         
         setNodes(prev => [...prev, ...newNodes])
-    }, [entities])
+    }, [dynamicNodes])
 
     return (
         <ReactFlow className="h-full w-full col-span-3 bg-[#ccc]"
