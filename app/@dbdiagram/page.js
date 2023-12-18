@@ -25,6 +25,8 @@ export default function DBDiagram() {
 
     useEffect(() => {
         const newNodes = dynamicNodes.reduce((prev,current) => {
+            console.log(current);
+            return []
             let node = nodes.find(item => item.id === current)
             if(node?.id){
                 return [...prev, {...node, data: {name: "edit"}}];

@@ -15,11 +15,22 @@ export const DBMLContextProvider = ({children}) => {
     const [entities, setEntities] = useState([]);
 
     const dynamicNodes = useMemo(() => {
-        for(let entity of entities){
-            let properties = [...entity[0].matchAll(NODEDEFINITIONS.property)];
-            console.log(properties)
-        }
-        return [];
+        return entities.map((entity) => {
+            let propertiesTemp = [...entity[0].matchAll(NODEDEFINITIONS.property)];
+            console.log(propertiesTemp);
+            let properties = propertiesTemp? propertiesTemp.map((property) => ({
+                name: property[1],
+                nullable: property[2]? true:false,
+                type: property[3]
+            })): []
+            
+            return {
+                entity: entity[1],
+                parentEntity: entity[2],
+                properties
+            }
+        })
+    
     }, [entities])
 
     return (

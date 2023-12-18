@@ -77,7 +77,7 @@ export default function Editor() {
     useEffect(() => {
         let entities = [...code.matchAll(NODEDEFINITIONS.entity)];
         setEntities(entities?.length? entities: [])
-    }, [codeArray])
+    }, [codeArray.toString()])
 
 
     return (
