@@ -20,7 +20,7 @@ export const DBMLContextProvider = ({children}) => {
             console.log(propertiesTemp);
             let properties = propertiesTemp? propertiesTemp.map((property) => ({
                 name: property[1],
-                nullable: property[2]? true:false,
+                nullable: property[2]? false:true,
                 type: property[3]
             })): []
             

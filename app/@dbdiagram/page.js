@@ -16,7 +16,7 @@ const initialNodes = [
 export default function DBDiagram() {
 
     const {dynamicNodes} = useDBMLContext();
-    const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
+    const [nodes, setNodes, onNodesChange] = useNodesState([])
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
     const onConnect = useCallback(
         (connection) => setEdges((eds) => addEdge(connection, eds)),
@@ -24,18 +24,16 @@ export default function DBDiagram() {
     );
 
     useEffect(() => {
-        const newNodes = dynamicNodes.reduce((prev,current) => {
-            console.log(current);
-            return []
-            let node = nodes.find(item => item.id === current)
+        const newNodes = dynamicNodes.reduce((prev,{entity, parentEntity, properties}) => {
+            let node = nodes.find(item => item.id === entity);
             if(node?.id){
-                return [...prev, {...node, data: {name: "edit"}}];
+                return [...prev, {...node, data: {entity, parentEntity, properties}}];
             }
             
 
-            return [...prev, {id: current,
+            return [...prev, {id: entity,
                 type: "entity",
-                data: {name: current},
+                data: {entity, parentEntity, properties},
                 position: {x:0, y:0},
                 dragHandle: '.custom-drag-heading'}]
         }, [])
