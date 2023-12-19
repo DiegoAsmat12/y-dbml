@@ -1,5 +1,7 @@
 'use client'
 
+import { useDBMLContext } from "@/contexts/global/DBMLContext";
+import { NODEDEFINITIONS } from "@/utils/textEditor";
 import { Fragment, useEffect, useMemo, useRef, useState } from "react"
 
 const specialText = [
@@ -15,6 +17,7 @@ const specialText = [
 
 export default function Editor() {
 
+    const {setEntities} = useDBMLContext();
     const [code, setCode] = useState("")
     const textRef = useRef();
 
@@ -71,11 +74,16 @@ export default function Editor() {
         return code.split("").reduce(concatenateReducer, [{value: "", color: "#ffffff"}])
     }, [code])
 
+    useEffect(() => {
+        let entities = [...code.matchAll(NODEDEFINITIONS.entity)];
+        setEntities(entities?.length? entities: [])
+    }, [codeArray.toString()])
+
 
     return (
         <section className="col-span-1 relative">
-            <textarea className="text-transparent bg-transparent caret-white absolute h-full w-full p-2 text-lg font-mono" onChange={(e) => setCode(e.target.value)} value={code} ref={textRef} onKeyDown={KeyDownHandler} />
-            <div className="bg-[#282828] text-lg text-white p-2 font-mono h-full cursor-pointer whitespace-pre-wrap" onClick={() => textRef.current.focus()}>
+            <textarea className="text-transparent bg-transparent caret-white absolute h-full w-full p-2 text-lg font-mono resize-none outline-none" onChange={(e) => setCode(e.target.value)} value={code} ref={textRef} onKeyDown={KeyDownHandler} />
+            <div className="bg-[#120616] text-lg text-white p-2 font-mono h-full cursor-pointer whitespace-pre-wrap" onClick={() => textRef.current.focus()}>
                 {/* Create html like elements */}
                 {codeArray.map(({color, value}, index) => 
                 (
